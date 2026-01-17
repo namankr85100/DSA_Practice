@@ -1,28 +1,52 @@
 Fenwick Tree (Binary Indexed Tree) Implementation
-A Fenwick Tree or Binary Indexed Tree (BIT) is a highly efficient data structure used for providing O(logN) time complexity for both point updates and prefix sum queries. This makes it significantly faster than a standard array for dynamic frequency tables or cumulative frequency scenarios.
+A Fenwick Tree (also known as a Binary Indexed Tree) is a data structure that provides a perfect balance between static prefix sums and dynamic array updates.
 
-🚀 Key Features
-Point Update: Add a value to an element in O(logN).
+❓ Why We Need This
+To understand why we need a Fenwick Tree, we must look at the trade-offs between other common approaches when dealing with an array of N elements:
 
-Prefix Sum: Calculate the sum of elements from the start to index i in O(logN).
+1. The Simple Array Approach
 
-Memory Efficient: Uses O(N) space (identical to a standard array).
+If you store data in a standard array:
 
-Zero Overhead: Ideal for competitive programming and high-performance data pipelines.
+Update an element: O(1) — Very fast.
+
+Get a range sum: O(N) — Very slow for large arrays, as you must loop through every element.
+
+Best for: Frequent updates, rare queries.
+
+2. The Prefix Sum Approach
+
+If you store a pre-calculated running total:
+
+Get a range sum: O(1) — Very fast (just subtract two numbers).
+
+Update an element: O(N) — Very slow, as you must update every subsequent prefix sum.
+
+Best for: Frequent queries, rare updates (static data).
+
+3. The Fenwick Tree (The Solution)
+
+The Fenwick Tree provides a middle ground that is "Fast at Everything":
+
+Update an element: O(logN)
+
+Get a range sum: O(logN)
+
+Best for: Dynamic data where numbers are changing frequently, and you need to calculate sums or frequencies in real-time without hitting Out of Memory or Time Limit Exceeded errors.
 
 🛠️ Logic & LSB
-The Fenwick Tree relies on the Least Significant Bit (LSB) to manage range responsibilities.
+The efficiency of a Fenwick Tree comes from the Least Significant Bit (LSB) logic. Each node at index i is responsible for a range of elements determined by the last set bit in the binary representation of i.
 
-The formula to find the LSB is: i & (-i)
+LSB Formula: i & (-i)
 
-To Update: We climb up the tree by adding the LSB to the current index.
+Update (Climb Up): Move to the next node by adding LSB.
 
-To Query: We climb down the tree by subtracting the LSB from the current index.
+Query (Climb Down): Move to the parent node by subtracting LSB.
 
 💻 Implementations
-Python Version
+Python
 
-Python's set() and integers are flexible, making this implementation very readable.
+Python’s integer handling makes the BIT implementation concise and safe for competitive programming.
 
 Python
 class FenwickTree:
@@ -48,31 +72,30 @@ class FenwickTree:
         """Get sum between [left, right] inclusive"""
         return self.query(right) - self.query(left - 1)
 
-# Example Usage
+# Example
 nums = [1, 7, 3, 0, 5, 8]
 bit = FenwickTree(len(nums))
 for idx, val in enumerate(nums, 1):
     bit.update(idx, val)
 
-print(f"Prefix sum of first 3: {bit.query(3)}") # Output: 11
-Node.js Version
+print(f"Prefix sum of first 3 elements: {bit.query(3)}") # Output: 11
+Node.js
 
-For Node.js, we use TypedArrays (Int32Array). This is crucial to prevent SIGKILL or Out of Memory errors when working with large datasets (100k+ elements), as it allocates memory outside the standard V8 garbage-collected heap.
+In Node.js, using Int32Array is a best practice for this structure. It allocates a contiguous block of memory, which is significantly faster and more memory-efficient than a standard Javascript Array [], helping prevent SIGKILL errors on large datasets.
 
 JavaScript
 /**
  * Fenwick Tree (Binary Indexed Tree)
- * Optimized for Node.js using TypedArrays
+ * Optimized for Node.js using TypedArrays for memory efficiency.
  */
 class FenwickTree {
     constructor(n) {
         this.size = n;
-        // Using Int32Array for better memory performance and to avoid OOM
+        // TypedArrays are stored outside the V8 heap, reducing OOM/SIGKILL risk
         this.tree = new Int32Array(n + 1);
     }
 
     /**
-     * Adds delta to the element at index i
      * @param {number} i - 1-based index
      * @param {number} delta - value to add
      */
@@ -84,8 +107,8 @@ class FenwickTree {
     }
 
     /**
-     * Returns the prefix sum up to index i
      * @param {number} i - 1-based index
+     * @returns {number} Prefix sum
      */
     query(i) {
         let sum = 0;
@@ -96,9 +119,6 @@ class FenwickTree {
         return sum;
     }
 
-    /**
-     * Returns the sum for a specific range
-     */
     queryRange(l, r) {
         return this.query(r) - this.query(l - 1);
     }
@@ -107,15 +127,9 @@ class FenwickTree {
 // Example Usage
 const bit = new FenwickTree(6);
 [1, 7, 3, 0, 5, 8].forEach((val, idx) => bit.update(idx + 1, val));
-console.log(`Prefix sum of first 3: ${bit.query(3)}`); // Output: 11
-⚠️ Performance Notes (Avoid SIGKILL)
-When implementing data structures in Node.js for heavy workloads:
-
-Prefer TypedArrays: Use Int32Array or Float64Array instead of standard [] to keep memory footprint predictable.
-
-Bitwise Operations: The i & -i operation is extremely fast in both V8 (Node.js) and Python.
-
-Memory Limits: If you process arrays larger than 10 million elements, run Node with:
-
-Bash
-node --max-old-space-size=4096 your_file.js
+console.log(`Prefix sum of first 3 elements: ${bit.query(3)}`); // Output: 11
+⚡ Performance Summary
+Operation	Array	Prefix Sum	Fenwick Tree
+Update	O(1)	O(N)	O(logN)
+Range Sum	O(N)	O(1)	O(logN)
+Space	O(N)	O(N)	O(N)
