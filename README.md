@@ -1,1 +1,3 @@
-# DSA_Practice
+# D_DSA
+
+Data structure and algorithm
