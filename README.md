@@ -9,6 +9,10 @@ A comprehensive collection of Data Structures and Algorithms implementations wit
 
 ### Tree Data Structures  
 - **Fenwick Tree (Binary Indexed Tree)**: Efficient O(log n) range sum queries and point updates
+- **Segment Tree**: Efficient range queries and range updates with O(log n) complexity
+
+### Fundamental Concepts
+- **Two's Complement & LSB**: Binary representation and bit manipulation fundamentals
 
 ## 🎯 How to Use This Repository
 
