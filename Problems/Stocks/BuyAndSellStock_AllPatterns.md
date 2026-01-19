@@ -122,6 +122,32 @@ Day 5: price=4, minPrice=1, profit=3, maxProfit=5
 Answer: 5
 ```
 
+**Visual Graph:**
+
+```
+Prices: [7, 1, 5, 3, 6, 4]
+
+  7│ ●                                 
+   │  ╲                               
+  6│   ╲              ● ← SELL (Day 4)
+   │    ╲            ╱ ╲              
+  5│     ╲      ●   ╱   ╲             
+   │      ╲    ╱ ╲ ╱     ╲            
+  4│       ╲  ╱   ●       ●           
+   │        ╲╱                        
+  3│         ╲   ╱                    
+   │          ╲ ╱                     
+  2│           ╲                      
+   │            ╲                     
+  1│             ● ← BUY (Day 1)      
+   │                                  
+  0└──────────────────────────────────
+     0   1   2   3   4   5   (days)
+
+Profit = 6 - 1 = 5 💰
+Strategy: Buy at minimum (1), sell at peak after minimum (6)
+```
+
 ---
 
 ## Problem 2: Buy and Sell Stock II (LeetCode 122)
@@ -187,15 +213,30 @@ function maxProfit(prices) {
 ```
 prices = [7, 1, 5, 3, 6, 4]
 
-         ┌─ 6
-      5 ─┤
-      │  │  4
-      │  3─┘
-7 ─┐  │
-   │  │
-   └─ 1
+  7│ ●                                 
+   │  ╲                               
+  6│   ╲              ●S2 ← SELL     
+   │    ╲            ╱ ╲              
+  5│     ╲      ●S1 ╱   ╲             
+   │      ╲    ╱ ╲ ╱     ╲            
+  4│       ╲  ╱   ●       ●           
+   │        ╲╱     B2                 
+  3│         ╲    ╱  ← BUY            
+   │          ╲  ╱                    
+  2│           ╲╱                     
+   │            ╲                     
+  1│             ●B1 ← BUY            
+   │                                  
+  0└──────────────────────────────────
+     0   1   2   3   4   5   (days)
+
+Transaction 1: Buy at 1 (B1), Sell at 5 (S1) → Profit = 4
+Transaction 2: Buy at 3 (B2), Sell at 6 (S2) → Profit = 3
+Total Profit = 4 + 3 = 7 💰
 
 Profitable moves: (5-1) + (6-3) = 4 + 3 = 7
+
+Greedy Strategy: Capture every upward slope!
 ```
 
 ---
@@ -272,6 +313,33 @@ function maxProfit(prices) {
          buy1        sell1        buy2        sell2
 START ─────→ HOLD1 ────→ SOLD1 ────→ HOLD2 ────→ SOLD2 (FINAL)
          -price    +price      -price    +price
+```
+
+**Visual Example:**
+
+```
+prices = [3, 3, 5, 0, 0, 3, 1, 4]
+
+  5│     ●S1 ← SELL (Transaction 1)    
+   │    ╱ ╲                            
+  4│   ╱   ╲                    ●S2 ← SELL (Transaction 2)
+   │  ╱     ╲                  ╱      
+  3│ ●───●   ╲          ●─────╱       
+   │          ╲        ╱ ╲            
+  2│           ╲      ╱   ╲           
+   │            ╲    ╱     ╲          
+  1│             ╲  ╱       ●B2 ← BUY (Transaction 2)
+   │              ╲╱                  
+  0│               ●B1───● ← BUY (Transaction 1)
+   │                                  
+   └────────────────────────────────────
+      0   1   2   3   4   5   6   7  (days)
+
+Transaction 1: Buy at 0 (day 3), Sell at 3 (day 5) → Profit = 3
+Transaction 2: Buy at 1 (day 6), Sell at 4 (day 7) → Profit = 3
+Total Maximum Profit = 3 + 3 = 6 💰
+
+Key: Two separate buy-sell pairs, no overlap!
 ```
 
 ---
@@ -432,6 +500,33 @@ REST ────────→ HOLD
 SOLD ←──────── SOLD
 ```
 
+**Visual Example:**
+
+```
+prices = [1, 2, 3, 0, 2]
+
+  3│     ●S1 ← SELL                   
+   │    ╱                             
+  2│   ╱               ●S2 ← SELL    
+   │  ╱               ╱               
+  1│ ●B1 ← BUY       ╱                
+   │                ╱                 
+  0│               ● B2 ← BUY         
+   │                                  
+   └──────────────────────────────────
+      0   1   2   3   4   (days)
+
+Day 0: BUY at 1        (state: HOLD)
+Day 1: SELL at 2       (state: SOLD, profit = 1)
+Day 2: COOLDOWN        (state: REST, cannot buy!) 🧊
+Day 3: BUY at 0        (state: HOLD)
+Day 4: SELL at 2       (state: SOLD, profit = 2)
+
+Total Profit = (2-1) + (2-0) = 1 + 2 = 3 💰
+
+Key: Must rest one day after selling before buying again!
+```
+
 ---
 
 ## Problem 6: Buy and Sell Stock with Transaction Fee (LeetCode 714)
@@ -490,6 +585,39 @@ function maxProfit(prices, fee) {
 }
 ```
 
+**Visual Example:**
+
+```
+prices = [1, 3, 2, 8, 4, 9], fee = 2
+
+  9│                         ●S2 ← SELL (9-4-2=3)
+   │                        ╱           
+  8│            ●S1        ╱            
+   │           ╱ ╲       ╱             
+  7│          ╱   ╲     ╱              
+   │         ╱     ╲   ╱               
+  6│        ╱       ╲ ╱                
+   │       ╱         ╲                 
+  5│      ╱           ╲                
+   │     ╱             ╲ B2 ← BUY      
+  4│    ╱               ●              
+   │   ╱                               
+  3│  ●                                
+   │ ╱                                 
+  2│╱                   ●              
+   │                                   
+  1│●B1 ← BUY                          
+   │                                   
+  0└────────────────────────────────────
+     0   1   2   3   4   5   (days)
+
+Transaction 1: Buy at 1, Sell at 8 → Profit = 8 - 1 - 2 = 5
+Transaction 2: Buy at 4, Sell at 9 → Profit = 9 - 4 - 2 = 3
+Total Profit = 5 + 3 = 8 💰
+
+Note: Fee of 2 is deducted from each transaction!
+```
+
 ---
 
 ## 📊 Comparison Table
@@ -502,6 +630,38 @@ function maxProfit(prices, fee) {
 | 188 | k | None | DP | O(nk) | O(k) |
 | 309 | Unlimited | Cooldown | State DP | O(n) | O(1) |
 | 714 | Unlimited | Fee | State DP | O(n) | O(1) |
+
+**Complexity Visualization:**
+
+```
+Difficulty vs Constraints:
+
+                      HARDEST
+                        ▲
+                        │
+    188 (k txns)  ──────┤
+                        │
+    123 (2 txns)  ──────┤
+                        │
+    309 (cooldown)──────┤
+    714 (fee)     ──────┤
+                        │
+    122 (unlimited)─────┤
+                        │
+    121 (1 txn)   ──────┤
+                        │
+                      EASIEST
+
+States to Track:
+┌────────────────────────────────────┐
+│ 121: min_price, max_profit         │ ← 2 variables
+│ 122: profit accumulator            │ ← 1 variable
+│ 123: buy1, sell1, buy2, sell2      │ ← 4 variables
+│ 188: buy[k], sell[k]               │ ← 2k arrays
+│ 309: hold, sold, rest              │ ← 3 variables
+│ 714: cash, hold                    │ ← 2 variables
+└────────────────────────────────────┘
+```
 
 ---
 
