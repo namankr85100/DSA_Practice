@@ -6,6 +6,7 @@ Categorized problem-solving patterns with detailed solutions and approaches.
 
 ### ✅ Available
 - **[Stocks](Stocks/)** - Buy and sell stock problems (6 variations)
+- **[Elimination Game](EliminationGame/)** - All elimination and Josephus problem patterns (6 variations)
 
 ### 🚧 Coming Soon
 
