@@ -28,7 +28,7 @@ DSA_Practice/
     │   └── BuyAndSellStock_AllPatterns.md  # All 6 LeetCode stock problems
     ├── TwoPointers/                   # (Coming soon)
     ├── SlidingWindow/                 # (Coming soon)
-    ├── DynamicProgramming/            # (Coming soon)
+    ├── DynamicProgramming/            # Knapsack + LIS patterns
     └── BinarySearch/                  # (Coming soon)
 ```
 

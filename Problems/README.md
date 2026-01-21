@@ -7,6 +7,9 @@ Categorized problem-solving patterns with detailed solutions and approaches.
 ### ✅ Available
 - **[Stocks](Stocks/)** - Buy and sell stock problems (6 variations)
 - **[Elimination Game](EliminationGame/)** - All elimination and Josephus problem patterns (6 variations)
+- **[Dynamic Programming](DynamicProgramming/)** - Core DP building blocks
+	- [Knapsack_AllVariants.md](DynamicProgramming/Knapsack_AllVariants.md)
+	- [LIS_Variations.md](DynamicProgramming/LIS_Variations.md)
 
 ### 🚧 Coming Soon
 
@@ -23,8 +26,6 @@ Categorized problem-solving patterns with detailed solutions and approaches.
 - Minimum window substring
 
 #### Dynamic Programming
-- Knapsack variations
-- Longest increasing subsequence
 - Edit distance
 - Matrix chain multiplication
 
